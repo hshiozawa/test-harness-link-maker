@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test Harness Link Maker</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+      $('document').ready(function () {
+        function add() {
+          var baseUrl = $("#parameters input[name=base-url]").val();
+          var fileName = $("#parameters input[name=file-name]").val();
+          var start = Number($("#parameters input[name=start]").val());
+          var end = Number($("#parameters input[name=end]").val());
+          var skip = Number($("#parameters input[name=skip]").val());
+
+          if (!baseUrl || !fileName) {
+            return;
+          }
+
+          var ul = $('#test-list');
+          for (var i = start; i <= end; i += skip) {
+            var num = ("00" + i).slice(-3);
+            var file = fileName.replace(/NNN/, num);
+            var link = baseUrl.replace(/FILE-NAME/, file);
+            var elem = $('<a>').attr('target', '_blank').attr('href', link).text(file);
+            ul.append($('<li>').append(elem));
+          }
+        }
+
+        function remove() {
+          var ul = $('#test-list');
+          ul.empty();
+        }
+
+        $('#add').click(add);
+        $('#remove').click(remove);
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Test Harness Link Maker</h1>
+    <div id="parameters">
+      <p>
+        <label>Base URL: <input type="text" name="base-url" size="50" value="http://test.csswg.org/harness/test/css-writing-modes-3_dev/single/FILE-NAME/format/html5/"></label>
+        ('FILE-NAME' is replaced with File Name.)
+      </p>
+      <p>
+        <label>File Name: <input type="text" name="file-name" size="30" value="abs-pos-non-replaced-vlr-NNN"></label>
+        ('NNN' is replaced with Test Case Number)<br/>
+      </p>
+      <p>
+        <label>Start: <input type="number" name="start" size="3" value="3"></label>
+        <label>End: <input type="number" name="end" size="3" value="97"></label>
+        <label>Skip: <input type="number" name="skip" size="3" value="2"></label>
+      </p>
+      <button id="add">Add link to list</button>
+      <button id="remove">Remove all</button>
+    </div>
+    <h2>Link List</h2>
+    <div>
+      <ul id="test-list">
+      </ul>
+    </div>
+  </body>
+</html>
